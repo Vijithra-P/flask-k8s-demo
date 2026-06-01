@@ -46,9 +46,9 @@ jobs:
 
       - name: Deploy
         run: |
-          kubectl set image deployment/flask-app \
-            flask-app=${{ secrets.DOCKER_USERNAME }}/flask-app:${{ github.sha }}
-          kubectl rollout status deployment/flask-app
+          kubectl apply -f k8s/
+          kubectl get deployments
+          
       - name: Verify deployment
         run: |
           kubectl get deployments
