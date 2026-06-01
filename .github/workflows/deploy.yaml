@@ -47,10 +47,19 @@ jobs:
       - name: Deploy
         run: |
           kubectl apply -f k8s/
+          kubectl set image deployment/flask-app \
+            flask-app=vijithra127/flask-app:${{ github.sha }}
           kubectl get deployments
+          kubectl rollout status deployment/flask-app --timeout=120s
           
       - name: Verify deployment
         run: |
           kubectl get deployments
-          kubectl get pods
+          kubectl get pods -o wide
+          kubectl describe deployment flask-app
           kubectl get svc
+
+      - name: Verify cluster
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
